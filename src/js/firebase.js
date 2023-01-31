@@ -1,4 +1,4 @@
-// Import the functions you need from the SDKs you need
+import { errorNotification } from './notifications';
 import {
   getAuth,
   signInWithPopup,
@@ -13,7 +13,7 @@ import {
 import { initializeApp } from 'firebase/app';
 // import { getFirestore, collection, getDocs } from 'firebase/firestore';
 
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: 'AIzaSyDFRxvG-cLncd4nzHUtwRVnlgrm2OeK7W8',
   authDomain: 'filmoteka-test-90b99.firebaseapp.com',
   projectId: 'filmoteka-test-90b99',
@@ -30,11 +30,30 @@ const auth = getAuth(app);
 const form = document.querySelector('.auth-form');
 const registrationButton = document.querySelector('.form-button-register');
 const signInButton = document.querySelector('.form-button-sign-in');
+const libraryRef = document.querySelector('.js-library-page');
+const watchedBtn = document.querySelector('.js-add-to-watched-btn');
+const queueBtn = document.querySelector('.js-add-to-queue-btn');
 
 registrationButton.addEventListener('click', handleRegistration);
 signInButton.addEventListener('click', handleSignIn);
-// let registeredUsers = [];
-// localStorage.setItem('users', JSON.stringify(registeredUsers));
+
+export function isUser(user) {
+  if (user === null) {
+    console.log('no user');
+    libraryRef.classList.add('visually-hidden');
+  } else libraryRef.classList.remove('visually-hidden');
+}
+
+export function isUserInModal(user) {
+  if (user === null) {
+    console.log('no user');
+    watchedBtn.setAttribute('disabled', true);
+    queueBtn.setAttribute('disabled', true);
+  } else {
+    watchedBtn.removeAttribute('disabled');
+    queueBtn.removeAttribute('disabled');
+  }
+}
 
 async function handleRegistration(event) {
   event.preventDefault();
@@ -51,12 +70,12 @@ async function handleRegistration(event) {
     console.log(user);
 
     if (email && password) {
-      alert('Thank you for registration');
+      alert('Thank you for registration. Please sign in!');
       form.reset();
     }
   } catch (error) {
     console.log(error);
-    handleRegistrationError(error);
+    handleError(error);
   }
 }
 
@@ -64,28 +83,48 @@ async function handleSignIn(event) {
   event.preventDefault();
   const email = form.elements.email.value;
   const password = form.elements.password.value;
+  if (signInButton.textContent === 'Sign in') {
+    try {
+      const response = await signInWithEmailAndPassword(auth, email, password);
+      const user = response.user;
+      console.log(user);
 
-  try {
-    const response = await signInWithEmailAndPassword(auth, email, password);
-    const user = response.user;
-    console.log(user);
-
-    if (email && password) {
-      alert('Thank you for coming back!');
-      form.reset();
+      if (email && password) {
+        alert('Thank you for coming back!');
+        signInButton.textContent = 'Sign out';
+        onAuthStateChanged(auth, isUser);
+        localStorage.setItem(`${user.uid}`, user.uid);
+        const currentUser = JSON.stringify([email, password]);
+        localStorage.setItem('current-user', currentUser);
+      }
+    } catch (error) {
+      console.log(error);
+      handleError(error);
     }
-  } catch (error) {
-    console.log(error);
-    handleRegistrationError(error);
+  } else if (signInButton.textContent === 'Sign out') {
+    try {
+      const response = await signOut(auth);
+
+      alert('You have successfully signed out!');
+      form.reset();
+      localStorage.removeItem('current-user');
+      signInButton.textContent = 'Sign in';
+      libraryRef.classList.add('visually-hidden');
+    } catch (error) {
+      console.log(error);
+      handleError(error);
+    }
   }
 }
 
-function handleRegistrationError(error) {
+export function handleError(error) {
   let errorMessage = error.message;
   if (errorMessage == 'Firebase: Error (auth/email-already-in-use).') {
     alert('This user is already exist. Please sign in!');
     // form.reset();
   } else if (errorMessage == 'Firebase: Error (auth/wrong-password).') {
     alert('Authorization error. Incorrect password');
-  }
+  } else if (errorMessage == 'Firebase: Error (auth/invalid-email).') {
+    alert('Please enter valid email!');
+  } else errorNotification();
 }
