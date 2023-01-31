@@ -1,11 +1,14 @@
 import axios from 'axios';
 import { Loading } from 'notiflix/build/notiflix-loading-aio';
+import { initializeApp } from 'firebase/app';
 import {
   handleAddToWatched,
   handleAddToQueue,
   isWatched,
   isQueue,
 } from './add-to-library';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { isUserInModal } from './firebase';
 
 Loading.init({
   svgSize: '120px',
@@ -22,6 +25,19 @@ const watchedBtn = document.querySelector('.watched-btn');
 const queueBtn = document.querySelector('.queue-btn');
 const body = document.querySelector('body');
 const modalCard = document.querySelector('.modal-film-card');
+
+const firebaseConfig = {
+  apiKey: 'AIzaSyDFRxvG-cLncd4nzHUtwRVnlgrm2OeK7W8',
+  authDomain: 'filmoteka-test-90b99.firebaseapp.com',
+  projectId: 'filmoteka-test-90b99',
+  storageBucket: 'filmoteka-test-90b99.appspot.com',
+  messagingSenderId: '222913084900',
+  appId: '1:222913084900:web:1011c02877eb5816a41bf1',
+  measurementId: 'G-V4RKSJYRFE',
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
 list.addEventListener('click', onClick);
 
@@ -40,6 +56,7 @@ async function onClick(evt) {
     createMarkupForOne(filmObj);
     isWatched();
     isQueue();
+    onAuthStateChanged(auth, isUserInModal);
     Loading.remove(500);
     modal.classList.remove('is-hidden');
 
