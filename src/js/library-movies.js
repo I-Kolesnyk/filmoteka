@@ -13,7 +13,9 @@ btnQueue.addEventListener('click', onClickBtnOueue);
 btnWatched.addEventListener('click', onClickBtnWatched);
 
 export function renderLibrary() {
-  const savedWatchedMovies = localStorage.getItem('watched-movies');
+  const currentUser =
+    'watched-'.concat(localStorage.getItem('user-email')) || '';
+  const savedWatchedMovies = localStorage.getItem(`${currentUser}`);
   const parsedWatchedMovies = JSON.parse(savedWatchedMovies) || [];
 
   if (parsedWatchedMovies.length === 0) {
@@ -40,11 +42,12 @@ export function renderLibrary() {
 }
 
 export function onClickBtnOueue() {
+  const currentUser = 'queue-'.concat(localStorage.getItem('user-email')) || '';
   btnQueue.classList.add('pag-queue');
   btnWatched.classList.remove('library-header__button--watched');
   btnQueue.classList.add('library-header__button--queue');
 
-  const savedQueueMovies = localStorage.getItem('queue-movies');
+  const savedQueueMovies = localStorage.getItem(`${currentUser}`);
   const parsedQueueMovies = JSON.parse(savedQueueMovies) || [];
 
   if (parsedQueueMovies.length === 0) {
@@ -77,11 +80,13 @@ export function onClickBtnOueue() {
 }
 
 export function onClickBtnWatched() {
+  const currentUser =
+    'watched-'.concat(localStorage.getItem('user-email')) || '';
   btnQueue.classList.remove('pag-queue');
   btnWatched.classList.add('library-header__button--watched');
   btnQueue.classList.remove('library-header__button--queue');
 
-  const savedWatchedMovies = localStorage.getItem('watched-movies');
+  const savedWatchedMovies = localStorage.getItem(`${currentUser}`);
   const parsedWatchedMovies = JSON.parse(savedWatchedMovies) || [];
 
   if (parsedWatchedMovies.length === 0) {
