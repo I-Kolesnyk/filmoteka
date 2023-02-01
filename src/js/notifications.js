@@ -87,6 +87,13 @@ export function successfulSignOut() {
   Notify.info('You have successfully signed out!', notifyOptions);
 }
 
+// export function newPassword() {
+//   Notify.info(
+//     'Letter with new password was sent to your email.',
+//     notifyOptions
+//   );
+// }
+
 export function newPassword() {
   Notify.info(
     'Letter with new password was sent to your email.',
