@@ -29,8 +29,7 @@ export function handleAddToQueue() {
 
 export function isWatched() {
   const movieData = JSON.parse(localStorage.getItem('movie-from-open-modal'));
-  const currentUser =
-    'watched-'.concat(localStorage.getItem('user-email')) || '';
+  const currentUser = 'watched-'.concat(localStorage.getItem('user-uid')) || '';
   const watchedMovies =
     JSON.parse(localStorage.getItem(`${currentUser}`)) || [];
   const isWatched = watchedMovies.some(movie => movie.id === movieData.id);
@@ -44,7 +43,7 @@ export function isWatched() {
 }
 
 export function isQueue() {
-  const currentUser = 'queue-'.concat(localStorage.getItem('user-email')) || '';
+  const currentUser = 'queue-'.concat(localStorage.getItem('user-uid')) || '';
   const movieData = JSON.parse(localStorage.getItem('movie-from-open-modal'));
   const queueMovies = JSON.parse(localStorage.getItem(`${currentUser}`)) || [];
   const isWatched = queueMovies.some(movie => movie.id === movieData.id);
@@ -57,8 +56,7 @@ export function isQueue() {
 }
 
 function addMovieToWatched() {
-  const currentUser =
-    'watched-'.concat(localStorage.getItem('user-email')) || '';
+  const currentUser = 'watched-'.concat(localStorage.getItem('user-uid')) || '';
   const movieData = JSON.parse(localStorage.getItem('movie-from-open-modal'));
 
   const watchedMovies =
@@ -81,7 +79,7 @@ function addMovieToWatched() {
 }
 
 function addMovieToQueue() {
-  const currentUser = 'queue-'.concat(localStorage.getItem('user-email')) || '';
+  const currentUser = 'queue-'.concat(localStorage.getItem('user-uid')) || '';
   const movieData = JSON.parse(localStorage.getItem('movie-from-open-modal'));
   const queueMovies = JSON.parse(localStorage.getItem(`${currentUser}`)) || [];
 
@@ -103,8 +101,7 @@ function addMovieToQueue() {
 
 function removeMovieFromWatched() {
   const movieData = JSON.parse(localStorage.getItem('movie-from-open-modal'));
-  const currentUser =
-    'watched-'.concat(localStorage.getItem('user-email')) || '';
+  const currentUser = 'watched-'.concat(localStorage.getItem('user-uid')) || '';
   const watchedMovies =
     JSON.parse(localStorage.getItem(`${currentUser}`)) || [];
   const isWatchedIndex = watchedMovies.findIndex(
@@ -123,7 +120,7 @@ function removeMovieFromWatched() {
 
 function removeMovieFromQueue() {
   const movieData = JSON.parse(localStorage.getItem('movie-from-open-modal'));
-  const currentUser = 'queue-'.concat(localStorage.getItem('user-email')) || '';
+  const currentUser = 'queue-'.concat(localStorage.getItem('user-uid')) || '';
   const queueMovies = JSON.parse(localStorage.getItem(`${currentUser}`)) || [];
   const isQueueIndex = queueMovies.findIndex(
     movie => movie.id === movieData.id

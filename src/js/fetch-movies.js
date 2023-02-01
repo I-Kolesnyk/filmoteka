@@ -4,17 +4,7 @@ import pagination from './pagination';
 import { failRequest } from './notifications';
 axios.defaults.baseURL = 'https://api.themoviedb.org/3';
 import { initializeApp } from 'firebase/app';
-import {
-  getAuth,
-  signInWithPopup,
-  GoogleAuthProvider,
-  GithubAuthProvider,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  onAuthStateChanged,
-  sendPasswordResetEmail,
-  signOut,
-} from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { handleError, isUser } from './firebase';
 
 const trendingGallery = document.querySelector('.js-movie-card');
