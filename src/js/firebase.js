@@ -1,9 +1,6 @@
 import { errorNotification } from './notifications';
 import {
   getAuth,
-  signInWithPopup,
-  GoogleAuthProvider,
-  GithubAuthProvider,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   onAuthStateChanged,
@@ -11,7 +8,13 @@ import {
   signOut,
 } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
-// import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import {
+  successfulRegistration,
+  successfulSignIn,
+  successfulSignOut,
+  newPassword,
+  errorNotification,
+} from './notifications';
 
 export const firebaseConfig = {
   apiKey: 'AIzaSyDFRxvG-cLncd4nzHUtwRVnlgrm2OeK7W8',
@@ -24,8 +27,7 @@ export const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-// const db = getFirestore(app);
-const auth = getAuth(app);
+let auth = getAuth(app);
 
 const form = document.querySelector('.auth-form');
 const registrationButton = document.querySelector('.form-button-register');
@@ -33,9 +35,11 @@ const signInButton = document.querySelector('.form-button-sign-in');
 const libraryRef = document.querySelector('.js-library-page');
 const watchedBtn = document.querySelector('.js-add-to-watched-btn');
 const queueBtn = document.querySelector('.js-add-to-queue-btn');
+const passwordReset = document.querySelector('.forgot-password');
 
 registrationButton.addEventListener('click', handleRegistration);
 signInButton.addEventListener('click', handleSignIn);
+passwordReset.addEventListener('click', handlePasswordReset);
 
 export function isUser(user) {
   if (user === null) {
@@ -67,10 +71,9 @@ async function handleRegistration(event) {
       password
     );
     const user = response.user;
-    console.log(user);
 
     if (email && password) {
-      alert('Thank you for registration. Please sign in!');
+      successfulRegistration();
       form.reset();
     }
   } catch (error) {
@@ -90,10 +93,10 @@ async function handleSignIn(event) {
       console.log(user);
 
       if (email && password) {
-        alert('Thank you for coming back!');
+        successfulSignIn();
         signInButton.textContent = 'Sign out';
         onAuthStateChanged(auth, isUser);
-        localStorage.setItem('user-email', user.email);
+        localStorage.setItem('user-uid', user.uid);
         const currentUser = JSON.stringify([email, password]);
         localStorage.setItem('current-user', currentUser);
       }
@@ -105,10 +108,10 @@ async function handleSignIn(event) {
     try {
       const response = await signOut(auth);
 
-      alert('You have successfully signed out!');
+      successfulSignOut();
       form.reset();
       localStorage.removeItem('current-user');
-      localStorage.removeItem('user-email');
+      localStorage.removeItem('user-uid');
       signInButton.textContent = 'Sign in';
       libraryRef.classList.add('visually-hidden');
     } catch (error) {
@@ -128,4 +131,16 @@ export function handleError(error) {
   } else if (errorMessage == 'Firebase: Error (auth/invalid-email).') {
     alert('Please enter valid email!');
   } else errorNotification();
+}
+
+async function handlePasswordReset() {
+  const email = form.elements.email.value;
+  try {
+    const newPassword = await sendPasswordResetEmail(auth, email);
+
+    newPassword();
+  } catch (error) {
+    console.log(error);
+    handleError(error);
+  }
 }

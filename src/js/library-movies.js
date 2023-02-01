@@ -13,8 +13,7 @@ btnQueue.addEventListener('click', onClickBtnOueue);
 btnWatched.addEventListener('click', onClickBtnWatched);
 
 export function renderLibrary() {
-  const currentUser =
-    'watched-'.concat(localStorage.getItem('user-email')) || '';
+  const currentUser = 'watched-'.concat(localStorage.getItem('user-uid')) || '';
   const savedWatchedMovies = localStorage.getItem(`${currentUser}`);
   const parsedWatchedMovies = JSON.parse(savedWatchedMovies) || [];
 
@@ -42,7 +41,7 @@ export function renderLibrary() {
 }
 
 export function onClickBtnOueue() {
-  const currentUser = 'queue-'.concat(localStorage.getItem('user-email')) || '';
+  const currentUser = 'queue-'.concat(localStorage.getItem('user-uid')) || '';
   btnQueue.classList.add('pag-queue');
   btnWatched.classList.remove('library-header__button--watched');
   btnQueue.classList.add('library-header__button--queue');
@@ -80,8 +79,7 @@ export function onClickBtnOueue() {
 }
 
 export function onClickBtnWatched() {
-  const currentUser =
-    'watched-'.concat(localStorage.getItem('user-email')) || '';
+  const currentUser = 'watched-'.concat(localStorage.getItem('user-uid')) || '';
   btnQueue.classList.remove('pag-queue');
   btnWatched.classList.add('library-header__button--watched');
   btnQueue.classList.remove('library-header__button--queue');
