@@ -1,6 +1,6 @@
 import axios from 'axios';
 import createMarkUp from './create-mark-up';
-import { movieTrending } from './fetch-movies';
+import { movieTrending, currentUser } from './fetch-movies';
 import pagination from './pagination';
 import {
   noMatchesNotification,

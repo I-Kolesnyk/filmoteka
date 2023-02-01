@@ -44,6 +44,8 @@ axios
   .then(genres => localStorage.setItem('genres', JSON.stringify(genres.data)))
   .catch(error => console.error(error));
 
+currentUser();
+
 export async function movieTrending(page = 1) {
   try {
     const response = await axios.get(
@@ -95,7 +97,6 @@ async function currentUser() {
     return;
   }
 
-  console.log(currentUser);
   form.elements.email.value = currentUser[0];
   form.elements.password.value = currentUser[1];
   signInButton.textContent = 'Sign out';
@@ -107,12 +108,8 @@ async function currentUser() {
     );
     const user = response.user;
     isUser(user);
-
-    console.log(user);
   } catch (error) {
     console.log(error);
     handleError(error);
   }
 }
-
-currentUser();
