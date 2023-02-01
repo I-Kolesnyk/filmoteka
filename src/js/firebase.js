@@ -1,4 +1,4 @@
-import { errorNotification } from './notifications';
+// import { errorNotification } from './notifications';
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -9,11 +9,12 @@ import {
 } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import {
+  errorNotification,
   successfulRegistration,
   successfulSignIn,
   successfulSignOut,
-  newPassword,
   errorNotification,
+  newPassword,
 } from './notifications';
 
 export const firebaseConfig = {
@@ -130,13 +131,23 @@ export function handleError(error) {
     alert('Authorization error. Incorrect password');
   } else if (errorMessage == 'Firebase: Error (auth/invalid-email).') {
     alert('Please enter valid email!');
+  } else if (errorMessage == 'Firebase: Error (auth/missing-email).') {
+    alert('Please enter email!');
+  } else if (errorMessage == 'Firebase: Error (auth/internal-error).') {
+    alert('Please enter password');
+  } else if (
+    errorMessage ==
+    'Firebase: Password should be at least 6 characters (auth/weak-password).'
+  ) {
+    alert('Password should be at least 6 characters.');
   } else errorNotification();
 }
 
 async function handlePasswordReset() {
+  event.preventDefault();
   const email = form.elements.email.value;
   try {
-    const newPassword = await sendPasswordResetEmail(auth, email);
+    const sendPassword = await sendPasswordResetEmail(auth, email);
 
     newPassword();
   } catch (error) {
