@@ -15,6 +15,13 @@ import {
   successfulSignOut,
   errorNotification,
   newPassword,
+  userExistNotification,
+  incorrectPasswordNotification,
+  invalidEmailNotification,
+  missingEmailNotification,
+  missingPasswordNotification,
+  weekPasswordNotification,
+  userNotFoundNotification,
 } from './notifications';
 
 export const firebaseConfig = {
@@ -44,14 +51,12 @@ passwordReset.addEventListener('click', handlePasswordReset);
 
 export function isUser(user) {
   if (user === null) {
-    console.log('no user');
     libraryRef.classList.add('visually-hidden');
   } else libraryRef.classList.remove('visually-hidden');
 }
 
 export function isUserInModal(user) {
   if (user === null) {
-    console.log('no user');
     watchedBtn.setAttribute('disabled', true);
     queueBtn.setAttribute('disabled', true);
   } else {
@@ -91,7 +96,6 @@ async function handleSignIn(event) {
     try {
       const response = await signInWithEmailAndPassword(auth, email, password);
       const user = response.user;
-      console.log(user);
 
       if (email && password) {
         successfulSignIn();
@@ -125,25 +129,33 @@ async function handleSignIn(event) {
 export function handleError(error) {
   let errorMessage = error.message;
   if (errorMessage == 'Firebase: Error (auth/email-already-in-use).') {
-    alert('This user is already exist. Please sign in!');
-    // form.reset();
+    // alert('This user is already exist. Please sign in!');
+    userExistNotification();
   } else if (errorMessage == 'Firebase: Error (auth/wrong-password).') {
-    alert('Authorization error. Incorrect password');
+    // alert('Authorization error. Incorrect password');
+    incorrectPasswordNotification();
   } else if (errorMessage == 'Firebase: Error (auth/invalid-email).') {
-    alert('Please enter valid email!');
+    // alert('Please enter valid email!');
+    invalidEmailNotification();
   } else if (errorMessage == 'Firebase: Error (auth/missing-email).') {
-    alert('Please enter email!');
+    // alert('Please enter email!');
+    missingEmailNotification();
   } else if (errorMessage == 'Firebase: Error (auth/internal-error).') {
-    alert('Please enter password');
+    // alert('Please enter password');
+    missingPasswordNotification();
   } else if (
     errorMessage ==
     'Firebase: Password should be at least 6 characters (auth/weak-password).'
   ) {
-    alert('Password should be at least 6 characters.');
+    // alert('Password should be at least 6 characters.');
+    weekPasswordNotification();
+  } else if (errorMessage == 'Firebase: Error (auth/user-not-found).') {
+    // alert('User not found! Please register!');
+    userNotFoundNotification();
   } else errorNotification();
 }
 
-async function handlePasswordReset() {
+async function handlePasswordReset(event) {
   event.preventDefault();
   const email = form.elements.email.value;
   try {
