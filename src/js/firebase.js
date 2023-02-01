@@ -93,7 +93,7 @@ async function handleSignIn(event) {
         alert('Thank you for coming back!');
         signInButton.textContent = 'Sign out';
         onAuthStateChanged(auth, isUser);
-        localStorage.setItem(`${user.uid}`, user.uid);
+        localStorage.setItem('user-email', user.email);
         const currentUser = JSON.stringify([email, password]);
         localStorage.setItem('current-user', currentUser);
       }
@@ -108,6 +108,7 @@ async function handleSignIn(event) {
       alert('You have successfully signed out!');
       form.reset();
       localStorage.removeItem('current-user');
+      localStorage.removeItem('user-email');
       signInButton.textContent = 'Sign in';
       libraryRef.classList.add('visually-hidden');
     } catch (error) {
