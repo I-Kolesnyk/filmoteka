@@ -3,6 +3,7 @@ import createMarkUp from './create-mark-up';
 import pagination from './pagination';
 import { failRequest } from './notifications';
 axios.defaults.baseURL = 'https://api.themoviedb.org/3';
+
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { handleError, isUser } from './firebase';
@@ -14,8 +15,13 @@ const API_KEY = '687f60735406ee0172c31461de2476ff';
 const TREND_URL = `/trending/movie/week`;
 const GENRES_URL = `/genre/movie/list`;
 
-const navCurrentLink = document.querySelector('.js-library-page');
+// const navCurrentLink = document.querySelector('.js-library-page');
 
+// localStorage.setItem('library-page', JSON.stringify(false));
+
+// navCurrentLink.addEventListener('click', () => {
+//   localStorage.setItem('library-page', JSON.stringify(true));
+// });
 const firebaseConfig = {
   apiKey: 'AIzaSyDFRxvG-cLncd4nzHUtwRVnlgrm2OeK7W8',
   authDomain: 'filmoteka-test-90b99.firebaseapp.com',
@@ -31,12 +37,6 @@ const auth = getAuth(app);
 
 const form = document.querySelector('.auth-form');
 const signInButton = document.querySelector('.form-button-sign-in');
-
-// localStorage.setItem('library-page', JSON.stringify(false));
-
-// navCurrentLink.addEventListener('click', () => {
-//   localStorage.setItem('library-page', JSON.stringify(true));
-// });
 
 localStorage.setItem('render-key', 'fetch-movies');
 axios
@@ -85,7 +85,6 @@ movieTrending()
       );
     }
     createMarkUp(data);
-    console.log(data);
     pagination(1, data.total_pages);
   })
   .catch(console.error());

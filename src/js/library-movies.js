@@ -12,9 +12,8 @@ const filmsContainer = document.querySelector('.js-container');
 btnQueue.addEventListener('click', onClickBtnOueue);
 btnWatched.addEventListener('click', onClickBtnWatched);
 
-export function renderLibrary() {
-  const currentUser = 'watched-'.concat(localStorage.getItem('user-uid')) || '';
-  const savedWatchedMovies = localStorage.getItem(`${currentUser}`);
+export function renderLibraryDefault() {
+  const savedWatchedMovies = localStorage.getItem('watched-movies');
   const parsedWatchedMovies = JSON.parse(savedWatchedMovies) || [];
 
   if (parsedWatchedMovies.length === 0) {
@@ -24,29 +23,17 @@ export function renderLibrary() {
     modal.classList.add('modal-in-library');
     emptyLibraryPage.style.display = 'none';
     filmsContainer.style.display = 'block';
-    if (window.screen.width > 1280) {
-      const chunkArr = chunk(parsedWatchedMovies, 9);
-      createLibraryMarkUp(chunkArr[0]);
-      pagination(1, chunkArr.length);
-    } else if ((window.screen.width >= 768) & (window.screen.width < 1280)) {
-      const chunkArr = chunk(parsedWatchedMovies, 8);
-      createLibraryMarkUp(chunkArr[0]);
-      pagination(1, chunkArr.length);
-    } else if (window.screen.width < 768) {
-      const chunkArr = chunk(parsedWatchedMovies, 4);
-      createLibraryMarkUp(chunkArr[0]);
-      pagination(1, chunkArr.length);
-    }
+
+    renderLibraryFilm(parsedWatchedMovies);
   }
 }
 
 export function onClickBtnOueue() {
-  const currentUser = 'queue-'.concat(localStorage.getItem('user-uid')) || '';
   btnQueue.classList.add('pag-queue');
   btnWatched.classList.remove('library-header__button--watched');
   btnQueue.classList.add('library-header__button--queue');
 
-  const savedQueueMovies = localStorage.getItem(`${currentUser}`);
+  const savedQueueMovies = localStorage.getItem('queue-movies');
   const parsedQueueMovies = JSON.parse(savedQueueMovies) || [];
 
   if (parsedQueueMovies.length === 0) {
@@ -59,19 +46,8 @@ export function onClickBtnOueue() {
       modal.classList.add('modal-in-library');
       emptyLibraryPage.style.display = 'none';
       filmsContainer.style.display = 'block';
-      if (window.screen.width > 1280) {
-        const chunkArrQueue = chunk(parsedQueueMovies, 9);
-        createLibraryMarkUp(chunkArrQueue[0]);
-        pagination(1, chunkArrQueue.length);
-      } else if ((window.screen.width >= 768) & (window.screen.width < 1280)) {
-        const chunkArrQueue = chunk(parsedQueueMovies, 8);
-        createLibraryMarkUp(chunkArrQueue[0]);
-        pagination(1, chunkArrQueue.length);
-      } else if (window.screen.width < 768) {
-        const chunkArrQueue = chunk(parsedQueueMovies, 4);
-        createLibraryMarkUp(chunkArrQueue[0]);
-        pagination(1, chunkArrQueue.length);
-      }
+
+      renderLibraryFilm(parsedQueueMovies);
     } catch (error) {
       console.log(error);
     }
@@ -79,12 +55,11 @@ export function onClickBtnOueue() {
 }
 
 export function onClickBtnWatched() {
-  const currentUser = 'watched-'.concat(localStorage.getItem('user-uid')) || '';
   btnQueue.classList.remove('pag-queue');
   btnWatched.classList.add('library-header__button--watched');
   btnQueue.classList.remove('library-header__button--queue');
 
-  const savedWatchedMovies = localStorage.getItem(`${currentUser}`);
+  const savedWatchedMovies = localStorage.getItem('watched-movies');
   const parsedWatchedMovies = JSON.parse(savedWatchedMovies) || [];
 
   if (parsedWatchedMovies.length === 0) {
@@ -99,22 +74,26 @@ export function onClickBtnWatched() {
     emptyLibraryPage.style.display = 'none';
     filmsContainer.style.display = 'block';
 
-    if (window.screen.width > 1280) {
-      const chunkArrWatched = chunk(parsedWatchedMovies, 9);
-      createLibraryMarkUp(chunkArrWatched[0]);
-      pagination(1, chunkArrWatched.length);
-    } else if ((window.screen.width >= 768) & (window.screen.width < 1280)) {
-      const chunkArrWatched = chunk(parsedWatchedMovies, 8);
-      createLibraryMarkUp(chunkArrWatched[0]);
-      pagination(1, chunkArrWatched.length);
-    } else if (window.screen.width < 768) {
-      const chunkArrWatched = chunk(parsedWatchedMovies, 4);
-      createLibraryMarkUp(chunkArrWatched[0]);
-      pagination(1, chunkArrWatched.length);
-    }
+    renderLibraryFilm(parsedWatchedMovies);
   } catch (error) {
     console.log(error);
   }
 }
 
-renderLibrary();
+function renderLibraryFilm(parseData) {
+  if (window.screen.width > 1280) {
+    const chunkArr = chunk(parseData, 9);
+    createLibraryMarkUp(chunkArr[0]);
+    pagination(1, chunkArr.length);
+  } else if ((window.screen.width >= 768) & (window.screen.width < 1280)) {
+    const chunkArr = chunk(parseData, 8);
+    createLibraryMarkUp(chunkArr[0]);
+    pagination(1, chunkArr.length);
+  } else if (window.screen.width < 768) {
+    const chunkArr = chunk(parseData, 4);
+    createLibraryMarkUp(chunkArr[0]);
+    pagination(1, chunkArr.length);
+  }
+}
+
+renderLibraryDefault();

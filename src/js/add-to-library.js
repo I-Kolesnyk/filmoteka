@@ -29,11 +29,9 @@ export function handleAddToQueue() {
 
 export function isWatched() {
   const movieData = JSON.parse(localStorage.getItem('movie-from-open-modal'));
-  const currentUser = 'watched-'.concat(localStorage.getItem('user-uid')) || '';
   const watchedMovies =
-    JSON.parse(localStorage.getItem(`${currentUser}`)) || [];
+    JSON.parse(localStorage.getItem('watched-movies')) || [];
   const isWatched = watchedMovies.some(movie => movie.id === movieData.id);
-  console.log(movieData, watchedMovies, isWatched);
 
   if (isWatched) {
     addToWatchedBtn.textContent = 'Remove from watched';
@@ -43,9 +41,8 @@ export function isWatched() {
 }
 
 export function isQueue() {
-  const currentUser = 'queue-'.concat(localStorage.getItem('user-uid')) || '';
   const movieData = JSON.parse(localStorage.getItem('movie-from-open-modal'));
-  const queueMovies = JSON.parse(localStorage.getItem(`${currentUser}`)) || [];
+  const queueMovies = JSON.parse(localStorage.getItem('queue-movies')) || [];
   const isWatched = queueMovies.some(movie => movie.id === movieData.id);
 
   if (isWatched) {
@@ -56,22 +53,20 @@ export function isQueue() {
 }
 
 function addMovieToWatched() {
-  const currentUser = 'watched-'.concat(localStorage.getItem('user-uid')) || '';
   const movieData = JSON.parse(localStorage.getItem('movie-from-open-modal'));
-
   const watchedMovies =
-    JSON.parse(localStorage.getItem(`${currentUser}`)) || [];
+    JSON.parse(localStorage.getItem('watched-movies')) || [];
 
   if (watchedMovies.length === 0) {
     watchedMovies.push(movieData);
-    localStorage.setItem(`${currentUser}`, JSON.stringify(watchedMovies));
+    localStorage.setItem('watched-movies', JSON.stringify(watchedMovies));
     successfulAddToWatchedNotification();
     addToWatchedBtn.textContent = 'Remove from watched';
   } else if (watchedMovies.length > 0) {
     const isWatched = watchedMovies.some(movie => movie.id === movieData.id);
     if (!isWatched) {
       watchedMovies.push(movieData);
-      localStorage.setItem(`${currentUser}`, JSON.stringify(watchedMovies));
+      localStorage.setItem('watched-movies', JSON.stringify(watchedMovies));
       successfulAddToWatchedNotification();
       addToWatchedBtn.textContent = 'Remove from watched';
     }
@@ -79,20 +74,19 @@ function addMovieToWatched() {
 }
 
 function addMovieToQueue() {
-  const currentUser = 'queue-'.concat(localStorage.getItem('user-uid')) || '';
   const movieData = JSON.parse(localStorage.getItem('movie-from-open-modal'));
-  const queueMovies = JSON.parse(localStorage.getItem(`${currentUser}`)) || [];
+  const queueMovies = JSON.parse(localStorage.getItem('queue-movies')) || [];
 
   if (queueMovies.length === 0) {
     queueMovies.push(movieData);
-    localStorage.setItem(`${currentUser}`, JSON.stringify(queueMovies));
+    localStorage.setItem('queue-movies', JSON.stringify(queueMovies));
     successfulAddToQueueNotification();
     addToQueueBtn.textContent = 'Remove from queue';
   } else if (queueMovies.length > 0) {
     const isQueue = queueMovies.some(movie => movie.id === movieData.id);
     if (!isQueue) {
       queueMovies.push(movieData);
-      localStorage.setItem(`${currentUser}`, JSON.stringify(queueMovies));
+      localStorage.setItem('queue-movies', JSON.stringify(queueMovies));
       successfulAddToQueueNotification();
       addToQueueBtn.textContent = 'Remove from queue';
     }
@@ -101,9 +95,8 @@ function addMovieToQueue() {
 
 function removeMovieFromWatched() {
   const movieData = JSON.parse(localStorage.getItem('movie-from-open-modal'));
-  const currentUser = 'watched-'.concat(localStorage.getItem('user-uid')) || '';
   const watchedMovies =
-    JSON.parse(localStorage.getItem(`${currentUser}`)) || [];
+    JSON.parse(localStorage.getItem('watched-movies')) || [];
   const isWatchedIndex = watchedMovies.findIndex(
     movie => movie.id === movieData.id
   );
@@ -112,7 +105,7 @@ function removeMovieFromWatched() {
     addToWatchedBtn.textContent = 'Add to watched';
   } else if (isWatchedIndex < watchedMovies.length) {
     watchedMovies.splice(isWatchedIndex, 1);
-    localStorage.setItem(`${currentUser}`, JSON.stringify(watchedMovies));
+    localStorage.setItem('watched-movies', JSON.stringify(watchedMovies));
     successfulDeleteFromWatchedNotification();
     addToWatchedBtn.textContent = 'Add to watched';
   } else errorNotification();
@@ -120,8 +113,7 @@ function removeMovieFromWatched() {
 
 function removeMovieFromQueue() {
   const movieData = JSON.parse(localStorage.getItem('movie-from-open-modal'));
-  const currentUser = 'queue-'.concat(localStorage.getItem('user-uid')) || '';
-  const queueMovies = JSON.parse(localStorage.getItem(`${currentUser}`)) || [];
+  const queueMovies = JSON.parse(localStorage.getItem('queue-movies')) || [];
   const isQueueIndex = queueMovies.findIndex(
     movie => movie.id === movieData.id
   );
@@ -130,7 +122,7 @@ function removeMovieFromQueue() {
     addToQueueBtn.textContent = 'Add to queue';
   } else if (isQueueIndex < queueMovies.length) {
     queueMovies.splice(isQueueIndex, 1);
-    localStorage.setItem(`${currentUser}`, JSON.stringify(queueMovies));
+    localStorage.setItem('queue-movies', JSON.stringify(queueMovies));
     successfulDeleteFromQueueNotification();
     addToQueueBtn.textContent = 'Add to queue';
   } else errorNotification();

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import createMarkUp from './create-mark-up';
-import { movieTrending, currentUser } from './fetch-movies';
+import { movieTrending } from './fetch-movies';
 import pagination from './pagination';
 import {
   noMatchesNotification,
@@ -31,7 +31,7 @@ export function onSearchSubmit(evt) {
     emptyQueryNotification();
     returnToMain();
   } else {
-    goSearch(searchQuery, (page = 1)).then(function (response) {
+    goSearch(searchQuery, 1).then(function (response) {
       if (!response) {
         noMatchesNotification();
         returnToMain();

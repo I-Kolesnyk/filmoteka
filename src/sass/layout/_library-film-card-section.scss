@@ -48,3 +48,22 @@
 .empty-library-link {
   color: var(--accent-color);
 }
+
+.film-vote {
+  text-align: center;
+
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 1.17;
+  padding: 1px 10px;
+  border-radius: 5px;
+
+  color: var(--white-text-color);
+  background-color: var(--accent-color);
+
+  @media screen and (min-width: 1280px) {
+    font-size: 12px;
+    line-height: 1.17;
+    padding: 3px 12px;
+  }
+}

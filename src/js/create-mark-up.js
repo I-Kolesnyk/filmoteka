@@ -63,5 +63,5 @@ export default function createMarkUp(arr) {
     .join('');
 
   trendingGallery.insertAdjacentHTML('beforeend', murkUp);
-  Loading.remove(500);
+  Loading.remove(1000);
 }

@@ -50,7 +50,7 @@ signInButton.addEventListener('click', handleSignIn);
 passwordReset.addEventListener('click', handlePasswordReset);
 
 export function isUser(user) {
-  if (user === null) {
+  if (!user) {
     libraryRef.classList.add('visually-hidden');
   } else libraryRef.classList.remove('visually-hidden');
 }
